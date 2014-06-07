@@ -1,9 +1,9 @@
 #include <vector>
-#include <map>
 #include <string>
+#include <stack>
 
 struct Node {
-  typedef std::vector<int> AdjacentList;
+  typedef std::vector<Node*> AdjacentList;
 
 Node() : visited(false), leader(NULL), finishTime(0) {}
 Node(int key) : key(key), visited(false), leader(NULL), finishTime(0) {}
@@ -16,20 +16,24 @@ Node(int key) : key(key), visited(false), leader(NULL), finishTime(0) {}
   int finishTime;
 };
 
+bool sortByFinishTime(Node& a, Node& b);
+
 struct Graph {
   typedef std::vector<Node> NodeList;
-  NodeList nodeList;
+  NodeList nodes;
   int finishTime;
   Node* leader;
 
   Graph() : finishTime(0), leader(NULL) {}
   void ReadFromFile(const std::string& fname);
+  void CreateNodes(const std::string& fname);
   std::string ToString();
-  void AddEdge(int tail, int head);
   Graph Reverse();
   Graph FinishTimeToKey();
-  void DFS_Loop();
-  void DFS(Node& node);
+  std::vector<Node*> DFS_Loop();
+  void DFS(Node& node, std::vector<Node*>& order);
+  void DFS_Loop2(std::vector<Node*>& order);
+  std::vector<int> GetTopFive();
 };
 
-Graph SSC(Graph& g);
+Graph SCC(Graph& g);

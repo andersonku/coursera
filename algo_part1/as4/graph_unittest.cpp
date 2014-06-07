@@ -3,36 +3,43 @@
 
 using namespace std;
 
+
+
 TEST(ReadFromFile, 0) {
   Graph g;
   g.ReadFromFile("simple.txt");
-  EXPECT_EQ(g.nodeList.size(), 3);
-  cout << g.ToString();
+  EXPECT_EQ(g.nodes.size(), 3);
+  cout << g.ToString() << endl;
   Graph reversed = g.Reverse();
-  reversed.DFS_Loop();
-  cout << reversed.ToString();
-  Graph finished = reversed.FinishTimeToKey();
-  cout << finished.ToString();
-  Graph lastOne = finished.Reverse();
-  lastOne.DFS_Loop();
-  cout << lastOne.ToString();
+  cout << reversed.ToString() << endl;
+  vector<Node*> order = reversed.DFS_Loop();
+  cout << reversed.ToString() << endl;
 
-  Graph g2;
-  g2.ReadFromFile("simple.txt");
-  cout << SSC(g2).ToString();
+  Graph lastOne = reversed.Reverse();
+  cout << lastOne.ToString() << endl;
 
-  cout << endl << endl;
+  lastOne.DFS_Loop2(order);
+
+  cout << lastOne.ToString() << endl;
+  cout << SCC(g).ToString() << endl;
+  // lastOne.DFS_Loop();
+  // cout << lastOne.ToString();
+
+  // Graph g2;
+  // g2.ReadFromFile("simple.txt");
+  // cout << SSC(g2).ToString();
+
+  // cout << endl << endl;
 
   Graph g3;
   g3.ReadFromFile("test.txt");
-  cout << SSC(g3).ToString();
+  cout << SCC(g3).ToString();
 
 
 
-  //Graph g4;
-  //g4.ReadFromFile("SCC.txt");
-  //g4.Reverse().DFS_Loop();
-  //SSC(g4);
+  Graph g4;
+  g4.ReadFromFile("SCC.txt");
+  SCC(g4);
 }
 
 // TEST(MyMain, Hahaha) {
