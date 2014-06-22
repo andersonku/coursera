@@ -14,10 +14,11 @@ void Heap::insert(const int key) {
   items[size++] = key;
 
   while (pos != 0) {
-    int& parent = items[pos/2];
-    if (key > parent)
+    int& item   = items[pos];
+    int& parent = items[(pos-1)/2];
+    if (item > parent)
       return;
-    swap(items[pos], parent);
+    swap(item, parent);
     pos /= 2;
   }
 }
