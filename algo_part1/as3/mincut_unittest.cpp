@@ -83,10 +83,9 @@ TEST(MyMain, Hahaha) {
    for (int i = 0; i < 10; ++i) {
       Graph beginGraph = graph;
       beginGraph.CollapseToTwo();
-      cout << "Min cut = " << beginGraph._nodes.begin()->second.size() << endl;
       result.push_back(beginGraph._nodes.begin()->second.size());
    }
    sort(result.begin(), result.end());
+   EXPECT_EQ(result[0], 17);
    cout << "Min of Min Cut = " << result[0] << endl;
-
 }

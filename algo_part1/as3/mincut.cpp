@@ -22,15 +22,6 @@ void Graph::ReadFile(char* fname) {
    }
 }
 
-//void PrintGraph(const Graph& g) {
-//   for (auto &node : g) {
-//      cout << node.first << endl;
-//      for (auto &tail : node.second) {
-//         cout << "   " << tail << endl;
-//      }
-//   }
-//}
-
 void RemoveThenErase(Graph::AdjacentList& list, int value) {
    list.erase(remove(list.begin(), list.end(), value), list.end());
 }
@@ -74,6 +65,5 @@ void Graph::CollapseToTwo()
    advance(myEntry, RandOutOf(_nodes.size()));
    int seed = RandOutOf(myEntry->second.size());
    CollpseBigIntoSmall(myEntry->first, myEntry->second[seed]);
-
    CollapseToTwo();
 }
