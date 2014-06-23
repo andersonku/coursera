@@ -1,13 +1,14 @@
 #include <vector>
 #include <map>
 
-typedef int Node;
-typedef int FirstNode;
-typedef std::vector<Node> AdjacentList;
-typedef std::map<FirstNode, AdjacentList> Graph;
+struct Graph {
+   typedef std::vector<int> AdjacentList;
 
+   std::map<int, AdjacentList> _nodes;
 
-Graph Collapse(Graph& g, int from, int to);
-Graph CollapseToTwo(Graph g);
-void PrintGraph(const Graph& g);
-Graph ReadFile(char* fname);
+   void CollpseBigIntoSmall(int from, int to);
+   void Collapse(int from, int to);
+   void CollapseToTwo();
+   //void PrintGraph(const Graph& g);
+   void ReadFile(char* fname);
+};

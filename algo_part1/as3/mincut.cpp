@@ -9,78 +9,71 @@
 
 using namespace std;
 
-Graph ReadFile(char* fname) {
-  Graph graph;
-  string line;
-  std::ifstream is(fname);
-  while (std::getline(is, line)) {
-    std::istringstream iss(line);
-    int node;
-    iss >> node;
-    std::istream_iterator<int> start(iss), end;
-    vector<int> connectedTo(start, end);
-    graph[node] = connectedTo;
-  }
-  return graph;
+void Graph::ReadFile(char* fname) {
+   string line;
+   std::ifstream is(fname);
+   while (std::getline(is, line)) {
+      std::istringstream iss(line);
+      int node;
+      iss >> node;
+      std::istream_iterator<int> start(iss), end;
+      vector<int> connectedTo(start, end);
+      _nodes[node] = connectedTo;
+   }
 }
 
-void PrintGraph(const Graph& g) {
-  for (Graph::const_iterator it = g.begin(); it != g.end(); ++it) {
-    cout << it->first << endl;
-    for (vector<int>::const_iterator it2 = it->second.begin(); it2 != it->second.end(); ++it2) {
-      cout << "   " << *it2 << endl;
-    }
-  }
-}
-
-Graph Collapse(Graph& g, Node from, Node to) {
-  if(g.size() < 2) {
-    return g;
-  }
-
-  Node maxNode = max(from, to);
-  Node minNode = min(from, to);
-  Graph::iterator maxEntry = g.find(max(from, to));
-  Graph::iterator minEntry = g.find(min(from, to));
-  AdjacentList& maxList = maxEntry->second;
-  AdjacentList& minList = minEntry->second;
-
-  maxList.erase(remove(maxList.begin(), maxList.end(), minNode), maxList.end());
-  minList.erase(remove(minList.begin(), minList.end(), maxNode), minList.end());
-  minList.insert(minList.end(), maxList.begin(), maxList.end());
-
-  g.erase(maxNode);
-  for (Graph::iterator it = g.begin(); it != g.end(); ++it) {
-    replace(it->second.begin(), it->second.end(), maxNode, minNode);
-  }
-  return g;
-}
-
-Graph CollapseToTwo (Graph g)
-{
-  if (g.size() < 3)
-    return g;
-  int seed = rand() % g.size();
-  Graph::iterator myEntry = g.begin();
-  advance(myEntry, seed);
-  seed = rand() % myEntry->second.size();
-  return CollapseToTwo(Collapse(g, myEntry->first, myEntry->second[seed]));
-}
-
-
-//int bmain(int, char** argv) {
-  //Graph* finalGraph = CollapseToTwo(input);
-  //cout << "Min cut = " << finalGraph.second.size() << endl;
-  /* std::ifstream is(argv[1]);
-  std::istream_iterator<int> start(is), end;
-  std::vector<int> numbers(start, end);
-  std::cout << "Read " << numbers.size() << " numbers" << std::endl;
-  Graph graph = ReadFile(argv[1]);
-  PrintGraph(graph);
-  // std::cout << "numbers read in:\n";
-  // std::copy(numbers.begin(), numbers.end(),
-  //           std::ostream_iterator<int>(std::cout, " "));
-  // std::cout << std::endl;
-
-  // cout << "Count = " << count << endl;*/
+//void PrintGraph(const Graph& g) {
+//   for (auto &node : g) {
+//      cout << node.first << endl;
+//      for (auto &tail : node.second) {
+//         cout << "   " << tail << endl;
+//      }
+//   }
 //}
+
+void RemoveThenErase(Graph::AdjacentList& list, int value) {
+   list.erase(remove(list.begin(), list.end(), value), list.end());
+}
+
+void Graph::CollpseBigIntoSmall(int from, int to) {
+   Collapse(max(from, to), min(from, to));
+}
+
+// Collpse two node into one
+void Graph::Collapse(int from, int to) {
+   if (_nodes.size() < 2)
+      return;   // Cannot be collapsed anymore
+
+   AdjacentList& fromAdjacentList = _nodes.find(from)->second;
+   AdjacentList& toAdjacentList = _nodes.find(to)->second;
+
+   // Remove edges between the nodes
+   RemoveThenErase(fromAdjacentList, to);
+   RemoveThenErase(toAdjacentList, from);
+
+   // Merge two adjacency list and remove the from node
+   toAdjacentList.insert(toAdjacentList.end(), fromAdjacentList.begin(), fromAdjacentList.end());
+   _nodes.erase(from);
+
+   // Update the adjacency list of everyone else
+   for (auto &node : _nodes) {
+      replace(node.second.begin(), node.second.end(), from, to);
+   }
+}
+
+int RandOutOf(int n) {
+   return rand() % n;
+}
+
+void Graph::CollapseToTwo()
+{
+   if (_nodes.size() < 3)
+      return;
+
+   auto myEntry = _nodes.begin();
+   advance(myEntry, RandOutOf(_nodes.size()));
+   int seed = RandOutOf(myEntry->second.size());
+   CollpseBigIntoSmall(myEntry->first, myEntry->second[seed]);
+
+   CollapseToTwo();
+}
