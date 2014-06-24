@@ -5,17 +5,16 @@ using namespace std;
 
 TEST(Collapse, 0) {
    Graph graph;
-   graph.CollpseBigIntoSmall(0, 0);
+   graph.CollapseBigIntoSmall(0, 0);
    EXPECT_EQ(graph._nodes.size(), 0);
 }
 
 TEST(Collapse, 1) {
    Graph graph;
    graph._nodes[0] = std::vector<int>();
-   graph.CollpseBigIntoSmall(0, 0);
+   graph.CollapseBigIntoSmall(0, 0);
    EXPECT_EQ(graph._nodes.size(), 1);
 }
-
 
 TEST(Collapse, 2) {
    Graph graph;
@@ -25,7 +24,7 @@ TEST(Collapse, 2) {
    Graph::AdjacentList list1;
    list1.push_back(0);
    graph._nodes[1] = list1;
-   graph.CollpseBigIntoSmall(0, 1);
+   graph.CollapseBigIntoSmall(0, 1);
    EXPECT_EQ(graph._nodes.size(), 1);
    EXPECT_EQ(graph._nodes[0].size(), 0);
 }
@@ -43,7 +42,7 @@ TEST(Collapse, 3_1) {
    list2.push_back(1);
    graph._nodes[2] = list2;
 
-   graph.CollpseBigIntoSmall(0, 1);
+   graph.CollapseBigIntoSmall(0, 1);
    ASSERT_EQ(graph._nodes.size(), 2);
    EXPECT_EQ(graph._nodes[0].size(), 1);
    EXPECT_EQ(graph._nodes[0][0], 2);
@@ -66,7 +65,7 @@ TEST(Collapse, 3_2) {
    list2.push_back(1);
    graph._nodes[2] = list2;
 
-   graph.CollpseBigIntoSmall(0, 1);
+   graph.CollapseBigIntoSmall(0, 1);
    ASSERT_EQ(graph._nodes.size(), 2);
    EXPECT_EQ(graph._nodes[0].size(), 2);
    EXPECT_EQ(graph._nodes[0][0], 2);
@@ -80,7 +79,7 @@ TEST(MyMain, Hahaha) {
    Graph graph;
    graph.ReadFile("kargerMinCut.txt");
    vector<int> result;
-   for (int i = 0; i < 10; ++i) {
+   for (int i = 0; i < 1000; ++i) {
       Graph beginGraph = graph;
       beginGraph.CollapseToTwo();
       result.push_back(beginGraph._nodes.begin()->second.size());
