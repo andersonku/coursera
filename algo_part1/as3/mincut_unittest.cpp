@@ -79,7 +79,7 @@ TEST(MyMain, Hahaha) {
    Graph graph;
    graph.ReadFile("kargerMinCut.txt");
    vector<int> result;
-   for (int i = 0; i < 1000; ++i) {
+   for (int i = 0; i < 10; ++i) {
       Graph beginGraph = graph;
       beginGraph.CollapseToTwo();
       result.push_back(beginGraph._nodes.begin()->second.size());

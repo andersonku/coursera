@@ -1,15 +1,14 @@
 #include <iostream>
-#include <iterator>
 #include <fstream>
 #include <sstream>
-#include <algorithm>
-#include "graph.h"
 #include <map>
 #include <stack>
+#include <algorithm>
+#include "graph.h"
 
 using namespace std;
 
-vector<int> SCC(Graph& g){
+vector<int> SCC(Graph& g) {
    auto pass1 = g.Reverse();
    vector<Node*> order = pass1->DFS_Loop(pass1->nodes.begin(), pass1->nodes.end());
    auto pass2 = pass1->Reverse();
